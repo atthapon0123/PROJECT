@@ -19,9 +19,9 @@ void SPI_init(SPIout *p)
 
 	
 /*	SPI3 FrameSync --> PA15	*/ 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
+  GPIO_Init(GPIOC, &GPIO_InitStructure);
 	
 /*	Configure AF6	*/
 	GPIOC->AFR[1] |= 0x00000600 | 0x00060000; //AF6 to PC10 and PC12

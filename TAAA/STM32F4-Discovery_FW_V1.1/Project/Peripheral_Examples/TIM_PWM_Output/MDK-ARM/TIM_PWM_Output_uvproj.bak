@@ -481,11 +481,6 @@
               <FilePath>.\NVIC.c</FilePath>
             </File>
             <File>
-              <FileName>PLL.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\PLL.c</FilePath>
-            </File>
-            <File>
               <FileName>rampgen.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\rampgen.c</FilePath>

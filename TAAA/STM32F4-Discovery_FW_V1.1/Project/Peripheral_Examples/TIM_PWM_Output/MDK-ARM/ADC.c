@@ -29,7 +29,7 @@
 #define COUNT 16384
 float TAAA1 = 0;
 int i = 0;	
-float TAAA1 = 0;
+
 
 void RCC_Configuration(void)
 {
