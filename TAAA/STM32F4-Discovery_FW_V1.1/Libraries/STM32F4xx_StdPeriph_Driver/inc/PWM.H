@@ -4,8 +4,8 @@
 
 typedef struct 
 	{ 
-		int duty;
-		int reserve1;
+		int Vcontrol;
+		int Wcontrol;
 		int reserve2;
 		int reserve3;
 		void (*init)() ;

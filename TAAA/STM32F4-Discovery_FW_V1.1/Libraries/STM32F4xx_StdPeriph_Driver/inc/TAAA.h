@@ -17,8 +17,6 @@
 #include "dqs_transform.h"
 #include "dqe_transform.h"
 #include "PLL.h"
-#include "trape.h"
-#include "pi_c_nr.h"
 #include "dac.h"
 
 
