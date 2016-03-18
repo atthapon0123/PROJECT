@@ -2,6 +2,8 @@
 #include "stm32f4xx.h"
 #include "SPI.h"
 
+uint16_t pos = 0;
+uint16_t output[8]= {0,0,0,0,0,0,0,0};
 
 void SPI_init(SPIout *p)
 {
@@ -19,9 +21,10 @@ void SPI_init(SPIout *p)
 
 	
 /*	SPI3 FrameSync --> PA15	*/ 
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_Init(GPIOC, &GPIO_InitStructure);
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
 	
 /*	Configure AF6	*/
 	GPIOC->AFR[1] |= 0x00000600 | 0x00060000; //AF6 to PC10 and PC12
@@ -49,61 +52,27 @@ void delay_ms(__IO uint32_t count)
 
 
 void SPI_update(SPIout *p)
-{
-/*	SPI3 Channel 1	*/
-	GPIOA->BSRRH |= 0x8000;
-  SPI3->DR = 0x0000 + p->dataout1;
-	SPI3->SR |= 0x0002;
- 	delay_ms(50);
- 	GPIOA->BSRRL |= 0x8000;
+{	
+	output[0] =  (0x0000+ p->dataout1);
+	output[1] =  (0x1000+ p->dataout2);
+	output[2] =  (0x2000+ p->dataout3);
+	output[3] =  (0x3000+ p->dataout4);
+	output[4] =  (0x4000+ p->dataout5);
+	output[5] =  (0x5000+ p->dataout6);
+	output[6] =  (0x6000+ p->dataout7);
+	output[7] =  (0x7000+ p->dataout8);
 	
-/*	SPI3 Channel 2	*/
-	GPIOA->BSRRH |= 0x8000;
-	SPI3->DR = 0x1000 + p->dataout2;
-	SPI3->SR  |= 0x0002;
-	delay_ms(50);
-	GPIOA->BSRRL |= 0x8000;
-
-/*	SPI3 Channel 3	*/	
-	GPIOA->BSRRH |= 0x8000;
-	SPI3->DR = 0x2000 + p->dataout3;
-	SPI3->SR  |= 0x0002;
-	delay_ms(50);
-	GPIOA->BSRRL |= 0x8000;
-
-/*	SPI3 Channel 4	*/
-	GPIOA->BSRRH |= 0x8000;
-	SPI3->DR = 0x3000 + p->dataout4;
-	SPI3->SR  |= 0x0002;
-	delay_ms(50);
-	GPIOA->BSRRL |= 0x8000;
-
-/*	SPI3 Channel 5	*/
-	GPIOA->BSRRH |= 0x8000;
-	SPI3->DR = 0x4000 + p->dataout5;
-	SPI3->SR  |= 0x0002;
-	delay_ms(50);
-	GPIOA->BSRRL |= 0x8000;
-
-/*	SPI3 Channel 6	*/
-	GPIOA->BSRRH |= 0x8000;
-	SPI3->DR = 0x5000 + p->dataout6;
-	SPI3->SR  |= 0x0002;
-	delay_ms(50);
-	GPIOA->BSRRL |= 0x8000;
-
-/*	SPI3 Channel 7	*/
-	GPIOA->BSRRH |= 0x8000;
-	SPI3->DR = 0x6000 + p->dataout7;
-	SPI3->SR  |= 0x0002;
-	delay_ms(50);
-	GPIOA->BSRRL |= 0x8000;
-
-/*	SPI3 Channel 8	*/
-	GPIOA->BSRRH |= 0x8000;
-	SPI3->DR = 0x7000 + p->dataout8;
-	SPI3->SR  |= 0x0002;
-	delay_ms(50);
-	GPIOA->BSRRL |= 0x8000;
+	while(pos <=7)
+	{
+		GPIOA->BSRRH |= 0x8000;
+		SPI3->DR = output[pos];
+		SPI3->SR = 0x0002;
+		pos++;
+		delay_ms(50);
+		GPIOA->BSRRL |= 0x8000;
+		delay_ms(50);
+	}
+		pos=0;
+	 
 }
 	

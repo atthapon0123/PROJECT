@@ -26,10 +26,11 @@
 	/* ----------------------------------------------*/
 	/*                 Table End                     */
 	/* ----------------------------------------------*/
+
 #define COUNT 16384
 float TAAA1 = 0;
-int i = 0;	
-
+int i = 0;
+float check =0;
 
 void RCC_Configuration(void)
 {
@@ -108,7 +109,7 @@ void ADC_Configuration(void)
  
 #define BUFFERSIZE  (6)  
 __IO uint16_t ADCTripleConvertedValues[BUFFERSIZE]; 
-__IO float analog[6] = { 0, 0, 0, 0, 0, 0 };
+__IO int analog[6] = { 0, 0, 0, 0, 0, 0 };
  
 static void DMA_Configuration(void)
 {
@@ -183,9 +184,6 @@ if(DMA_GetITStatus(DMA2_Stream0, DMA_IT_HTIF0))
 /* Clear DMA Stream Half Transfer interrupt pending bit */
 DMA_ClearITPendingBit(DMA2_Stream0, DMA_IT_HTIF0);
 
-/* Turn LED3 off: Half Transfer */
-STM_EVAL_LEDOff(LED3);
-
 // Add code here to process first half of buffer (ping)
 }
 
@@ -195,11 +193,6 @@ if(DMA_GetITStatus(DMA2_Stream0, DMA_IT_TCIF0))
 /* Clear DMA Stream Transfer Complete interrupt pending bit */
 DMA_ClearITPendingBit(DMA2_Stream0, DMA_IT_TCIF0);
 
-/* Turn LED3 on: End of Transfer */
-STM_EVAL_LEDOn(LED3);
-STM_EVAL_LEDOn(LED4);
-STM_EVAL_LEDOn(LED5);
-STM_EVAL_LEDOn(LED6);
 
 // Add code here to process second half of buffer (pong)
 }
@@ -223,89 +216,47 @@ ADC_Configuration();
 /* Start ADC1 Software Conversion */
 	ADC_SoftwareStartConv(ADC1);
 	
-		
-
-	while(1)  // Don't want to exit
-	{
-		analog[0] = (float) ADCTripleConvertedValues[0]  ; 	//PA0
-		analog[1] = (float) ADCTripleConvertedValues[1]  ; 	//PA1
-		analog[2] = (float) ADCTripleConvertedValues[2]  ; 	//PC0
-		analog[3] = (float) ADCTripleConvertedValues[3]  ; 	//PC1
-		analog[4] = (float) ADCTripleConvertedValues[4]  ; 	//PC1
-		analog[5] = (float) ADCTripleConvertedValues[5]  ; 	//PC1
-	}
-///* Open Clock for GPIOC and ADC */
-//	RCC->APB2ENR |= 0x00000700; //ADC1-3
-//	RCC->AHB1ENR |= 0x00000001; //GPIOA
-//	
-///* Pin Configuration for ADC */
-//	GPIOA->MODER |= 0x0000003F; //Analog Mode for PA0-2
-//	
-///* ADC Common configuration */
-//	ADC->CCR |= 0x00000017;  //TripleMode RegSimult
-//	
-//	
-//	
-///* Configuration for ADC1 Initialize */
-//	ADC1->CR1 |= 0x00000080; //Scan mode disable
-//	ADC1->CR2 |= 0x00000002; //Continuous conversion mode enable
-//	ADC_RegularChannelConfig(ADC1, ADC_Channel_2 , 1, ADC_SampleTime_3Cycles);	//Channel 0-3 sampling each 3 cycles
-//	ADC1->CR2 |= 0x00000401; //ADC1 enable ,EOCS ENB
-//	
-//	
-//	
-///* Configuration for ADC2 Initialize */
-//	ADC2->CR1 |= 0x00000080; //Scan mode disable
-//	ADC2->CR2 |= 0x00000002; //Continuous conversion mode enable
-//	ADC_RegularChannelConfig(ADC2, ADC_Channel_0, 1, ADC_SampleTime_3Cycles);	//Channel 0 sampling each 3 cycles
-//	ADC2->CR2 |= 0x00000001; //ADC2 enable
-//	
-///* Configuration for ADC3 Initialize */
-//	ADC3->CR1 |= 0x00000080; //Scan mode disable
-//	ADC3->CR2 |= 0x00000002; //Continuous conversion mode enable
-//	ADC_RegularChannelConfig(ADC3, ADC_Channel_1, 1, ADC_SampleTime_3Cycles);	//Channel 1 sampling each 3 cycles
-//	ADC3->CR2 |= 0x00000001; //ADC3 enable
-//	
-//	ADC1->CR2 |= 0x40000000; 		//Start conversion of regular channel 1
-//	ADC2->CR2 |= 0x40000000;		//Start conversion of regular channel 2
-//	ADC3->CR2 |= 0x40000000;    //Start conversion of regular channel 3
-
- 
 
 } 
 
 
-
-int err[4];
-int error[4];
-
 void ADC_update(ADCvalue *p)
 {
-	if ((i<=COUNT)&&(analog[0] >= 2047))
+		analog[0] = (int) ADCTripleConvertedValues[0]  ; 	//PA0
+		analog[1] = (int) ADCTripleConvertedValues[1]  ; 	//PA1
+		analog[2] = (int) ADCTripleConvertedValues[2]  ; 	//PC0
+		analog[3] = (int) ADCTripleConvertedValues[3]  ; 	//PC1
+		analog[4] = (int) ADCTripleConvertedValues[4]  ; 	//PC1
+		analog[5] = (int) ADCTripleConvertedValues[5]  ; 	//PC1
+
+
+	if ((i<=COUNT))
 	{
-		STM_EVAL_LEDOff(LED4);
-		if ((i<=COUNT)&&(analog[0] >= 2047))
+
+		if ((i<=COUNT))
 		{
-			err[0]+=analog[0];
-			err[1]+=analog[1];
-			err[2]+=analog[3];
-			err[3]+=analog[4];
+			p->err0 += (int) ADCTripleConvertedValues[0];
+			p->err1 += (int) ADCTripleConvertedValues[1];
+			p->err2 += analog[3];
+			p->err3 += analog[4];
 			i++;
 		}
-		error[0]=(err[0]/(i-1))-4096;
-		error[1]=(err[1]/(i-1))-4096;
-		error[2]=(err[2]/(i-1))-4096;
-		error[3]=(err[3]/(i-1))-4096;
+		p->error0=((int)p->err0/(i-1))-0x0800;
+		p->error1=((int)p->err1/(i-1))-0x0800;
+		p->error2=((int)p->err2/(i-1))-0x0800;
+		p->error3=((int)p->err3/(i-1))-0x0800;
 	}
-	else if (i == COUNT+1)
+	else
 	{
-	 STM_EVAL_LEDOn(LED4);
-	p->volt_grid_ab = (analog[0]-error[0])  ; 	//PA0
-	p->volt_grid_bc = (analog[1]-error[1])   ; 	//PA1
-	p->reserve1     = analog[2]  ;  //PA2
-	p->volt_gen_ab  = (analog[3]-error[2])  ; 	//PC0
-	p->volt_gen_bc  = (analog[4]-error[3])  ;	//PC1
-	p->reserve2     = analog[5]  ;  //PC2
+
+	p->volt_grid_ab = ((int) ADCTripleConvertedValues[0] - p->error0)  ; 	//PA0
+	p->volt_grid_bc = ((int) ADCTripleConvertedValues[1] - p->error1)   ; 	//PA1
+	
+	p->volt_grid_ab_set0 = ((float)p->volt_grid_ab*3/4095) - 1.5 ; //set0 unit3V 
+	p->volt_grid_bc_set0 = ((float)p->volt_grid_bc*3/4095) - 1.5 ; //set0 unit3V
+
+	p->volt_grid_ab_pu = p->volt_grid_ab_set0/2.06944 ;
+	p->volt_grid_bc_pu = p->volt_grid_bc_set0/2.06944 ;
 	}
 
 }

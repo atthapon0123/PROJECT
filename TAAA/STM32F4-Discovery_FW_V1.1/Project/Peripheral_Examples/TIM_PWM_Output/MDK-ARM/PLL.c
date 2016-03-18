@@ -4,10 +4,6 @@
 #include "stm32f4_discovery.h"
 #include "stm32f4xx.h" 
 #include "PLL.h"
-#include "math.h"
-#include "trape.h"
-#include "pi_c_nr.h"
-
 
 /*****************************************************************************************/
 /*                   _______________             ______         _________         _____  */
@@ -25,32 +21,51 @@
 /*****************************************************************************************/
 
 #define PI 3.14159265359
-TRAPE trape = TRAPE_DEFAULTS; //Integrate Function
-PI_C_NR pi_c_noref = PI_C_NR_DEFAULTS; //PI controller
 
 /*Calculate Phase Lock Loop Function*/
-void PLL_cal(PLL *p)
+void pll_calc(PLL *p)
 {
-
-
-	/* PI controller */
-	pi_c_noref.kp = 0.0125;
-	pi_c_noref.ki = 0.25;
-	pi_c_noref.input = p->V_Qe ; 
-	pi_c_noref.cal(&pi_c_noref) ;
 		
-	/* Integrate */
-	trape.input = (pi_c_noref.Uo+1) * 100 * PI ;
-	trape.calc(&trape);
-	
-//	/* Angle Modulation with 2*PI */
-//	p->angle = fmodf(trape.output,2*PI);
-	
-//	p->angle = trape.output ;
-//		if(p->angle>(2*PI))
-//			p->angle -= (2*PI);
-//		else if (p->angle <(-2*PI))
-//			p->angle += (2*PI);
-//		else 
-//			p->angle = p->angle ;
+		//Error
+		p->Err = p->input;
+
+	// PI compute
+		p->Up_out = p->kp*p->Err;
+		p->Ui_out = p->Ui_out+(p->ki*p->Up_out);
+
+		// cal presat output
+		p->Outpresat = p->Up_out + p->Ui_out;
+
+		//Anti Windup
+		if(p->Outpresat > p->limit_up)
+		{
+			p->PIout = p->limit_up;
+		}
+		else if(p->Outpresat < p->limit_down)
+		{
+			p->PIout = p->limit_down;
+		}
+		else
+		{
+			p->PIout = p->Outpresat;
+		}
+		
+		p->w = (p->PIout+1)*100*PI;
+
+		//integral
+		p->Theta = p->Theta + (p->step*p->w);
+		
+
+		if( p->Theta > (2*PI) || p->Theta < 0)
+		{
+			if (p->Theta > 2*PI)
+			{
+				p->Theta = p->Theta - (2*PI);
+			}
+			else if(p->Theta < (-2*PI))
+			{
+				p->Theta = p->Theta + (2*PI);
+			}
+		}
+
 }

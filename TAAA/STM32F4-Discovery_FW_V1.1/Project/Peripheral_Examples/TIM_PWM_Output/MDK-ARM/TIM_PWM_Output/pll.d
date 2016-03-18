@@ -36,6 +36,3 @@
 .\tim_pwm_output\pll.o: ..\..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\stm32f4xx_wwdg.h
 .\tim_pwm_output\pll.o: ..\..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\misc.h
 .\tim_pwm_output\pll.o: ..\..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\PLL.h
-.\tim_pwm_output\pll.o: C:\Keil\ARM\ARMCC\bin\..\include\math.h
-.\tim_pwm_output\pll.o: ..\..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\trape.h
-.\tim_pwm_output\pll.o: ..\..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\pi_c_nr.h

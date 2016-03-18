@@ -46,5 +46,3 @@
 .\tim_pwm_output\main.o: ..\..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\dqs_transform.h
 .\tim_pwm_output\main.o: ..\..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\dqe_transform.h
 .\tim_pwm_output\main.o: ..\..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\PLL.h
-.\tim_pwm_output\main.o: ..\..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\trape.h
-.\tim_pwm_output\main.o: ..\..\..\..\Libraries\STM32F4xx_StdPeriph_Driver\inc\pi_c_nr.h

@@ -127,8 +127,8 @@ void PWM_Init(PWM *p)
 void PWM_Update(PWM *p)
 {
 /* Modulation with TIM1 CH1-4 */
-		TIM1->CCR1 = p->duty;					    //Pulse Value for CH1
-//	TIM1->CCR2 = p->reserve1;					//Pulse Value for CH2
+		TIM1->CCR1 = p->Vcontrol;					    //Pulse Value for CH1
+		TIM1->CCR2 = p->Wcontrol;					//Pulse Value for CH2
 //	TIM1->CCR3 = p->reserve2;					//Pulse Value for CH3
 //  TIM1->CCR4 = p->reserve3;					//Pulse Value for CH4 
 }

@@ -451,29 +451,9 @@
               <FilePath>.\SPI.c</FilePath>
             </File>
             <File>
-              <FileName>pid_c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\pid_c.c</FilePath>
-            </File>
-            <File>
-              <FileName>pi_c_nr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\pi_c_nr.c</FilePath>
-            </File>
-            <File>
-              <FileName>pid_c_nr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\pid_c_nr.c</FilePath>
-            </File>
-            <File>
               <FileName>dqe_transform.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\dqe_transform.c</FilePath>
-            </File>
-            <File>
-              <FileName>trape.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\trape.c</FilePath>
             </File>
             <File>
               <FileName>NVIC.c</FileName>
@@ -481,19 +461,14 @@
               <FilePath>.\NVIC.c</FilePath>
             </File>
             <File>
-              <FileName>rampgen.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\rampgen.c</FilePath>
-            </File>
-            <File>
-              <FileName>sinemod.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\sinemod.c</FilePath>
-            </File>
-            <File>
               <FileName>dqs_trans.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\dqs_trans.c</FilePath>
+            </File>
+            <File>
+              <FileName>PLL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\PLL.c</FilePath>
             </File>
           </Files>
         </Group>
